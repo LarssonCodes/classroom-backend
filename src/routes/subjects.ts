@@ -7,10 +7,24 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const { search, departments, page = 1, limit = 10 } = req.query;
+    const { search, departments, page, limit } = req.query;
 
-    const currentPage = Math.max(1, +page);
-    const limitPerPage = Math.max(1, +limit);
+    let parsedPage = parseInt(page as string, 10);
+    if (isNaN(parsedPage) || !isFinite(parsedPage) || parsedPage < 1) {
+      parsedPage = 1;
+    }
+
+    let parsedLimit = parseInt(limit as string, 10);
+    if (isNaN(parsedLimit) || !isFinite(parsedLimit) || parsedLimit < 1) {
+      parsedLimit = 10;
+    }
+    const MAX_LIMIT = 100;
+    if (parsedLimit > MAX_LIMIT) {
+      parsedLimit = MAX_LIMIT;
+    }
+
+    const currentPage = parsedPage;
+    const limitPerPage = parsedLimit;
     const offset = (currentPage - 1) * limitPerPage;
     const filterConditions = [];
     if (search) {
@@ -51,7 +65,7 @@ router.get('/', async (req, res) => {
         page: currentPage,
         limit: limitPerPage,
         total: totalCount,
-        totalPages: Math.ceil(totalCount / totalCount),
+        totalPages: limitPerPage > 0 ? Math.ceil(totalCount / limitPerPage) : 0,
       }
     });
   } catch (e) {
