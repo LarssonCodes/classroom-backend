@@ -1,6 +1,7 @@
-import express from 'express';
-import subjectsRouter from './routes/subjects.js';
-import cors from 'cors';
+import cors from "cors";
+import express from "express";
+import subjectsRouter from "./routes/subjects.js";
+import securityMiddleware from "./middleware/security.js";
 
 const app = express();
 const PORT = 8000;
@@ -27,14 +28,15 @@ app.use(
 );
 
 app.use(express.json());
-app.use('/api/subjects', subjectsRouter);
 
+app.use(securityMiddleware);
 
-app.get('/', (req, res) => {
-  res.send('Backend server is running!');
+app.use("/api/subjects", subjectsRouter);
+
+app.get("/", (req, res) => {
+    res.send("Backend server is running!");
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
-
