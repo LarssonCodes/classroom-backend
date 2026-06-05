@@ -15,6 +15,13 @@
       "when": 1780641108337,
       "tag": "0001_curved_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780641998566,
+      "tag": "0002_cuddly_santa_claus",
+      "breakpoints": true
     }
   ]
 }

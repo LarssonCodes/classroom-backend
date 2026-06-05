@@ -1,5 +1,5 @@
-import { integer, pgTable, timestamp, varchar, pgEnum, text, jsonb, index, unique } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { integer, pgTable, timestamp, varchar, pgEnum, text, jsonb, index, unique, check } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
 import { user, session, account } from "./auth.js";
 
 const timestamps = {
@@ -48,6 +48,7 @@ export const classes = pgTable('classes', {
 }, (table) => [
     index("classes_subject_id_idx").on(table.subjectId),
     index("classes_teacher_id_idx").on(table.teacherId),
+    check("classes_capacity_check", sql`${table.capacity} >= 1`),
 ]);
 
 export const enrollments = pgTable('enrollments', {

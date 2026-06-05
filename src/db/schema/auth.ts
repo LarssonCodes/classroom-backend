@@ -1,4 +1,4 @@
-import { boolean, pgEnum, pgTable, text, timestamp, index } from "drizzle-orm/pg-core";
+import { boolean, pgEnum, pgTable, text, timestamp, index, unique } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 const timestamps = {
@@ -48,6 +48,7 @@ export const account = pgTable("account", {
     ...timestamps,
 }, (table) => [
     index("account_userId_idx").on(table.userId),
+    unique("account_provider_account_unique").on(table.providerId, table.accountId),
 ]);
 
 export const verification = pgTable("verification", {
