@@ -2,6 +2,8 @@ import cors from "cors";
 import express from "express";
 import subjectsRouter from "./routes/subjects.js";
 import securityMiddleware from "./middleware/security.js";
+import {toNodeHandler} from "better-auth/node";
+import {auth} from "./lib/auth.js";
 
 const app = express();
 const PORT = 8000;
@@ -26,7 +28,7 @@ app.use(
     credentials: true, // allow cookies
   }),
 );
-
+app.all('/api/auth/*spat',toNodeHandler(auth));
 app.use(express.json());
 
 app.use(securityMiddleware);
