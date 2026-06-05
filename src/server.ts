@@ -7,7 +7,7 @@ const PORT = 8000;
 // Use json middleware
 app.use(express.json());
 
-app.use('/subjects', subjectsRouter);
+app.use('/api/subjects', subjectsRouter);
 
 // Root GET route returning a short message
 app.get('/', (req, res) => {
