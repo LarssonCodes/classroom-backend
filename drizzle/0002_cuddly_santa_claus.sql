@@ -1,0 +1,2 @@
+ALTER TABLE "account" ADD CONSTRAINT "account_provider_account_unique" UNIQUE("providerId","accountId");--> statement-breakpoint
+ALTER TABLE "classes" ADD CONSTRAINT "classes_capacity_check" CHECK ("classes"."capacity" >= 1);

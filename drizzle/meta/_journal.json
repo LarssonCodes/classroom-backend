@@ -8,6 +8,20 @@
       "when": 1780471719281,
       "tag": "0000_modern_iron_fist",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1780641108337,
+      "tag": "0001_curved_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780641998566,
+      "tag": "0002_cuddly_santa_claus",
+      "breakpoints": true
     }
   ]
 }
