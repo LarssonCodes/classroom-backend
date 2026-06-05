@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const { search, departments, page, limit } = req.query;
+    const { search, departments, department: queryDept, page, limit } = req.query;
+    const deptFilter = (departments || queryDept) as string;
 
     let parsedPage = parseInt(page as string, 10);
     if (isNaN(parsedPage) || !isFinite(parsedPage) || parsedPage < 1) {
@@ -35,18 +36,21 @@ router.get('/', async (req, res) => {
         )
       );
     }
-    if (departments) {
-      filterConditions.push(ilike(department.name, `%${departments}%`));
+    if (deptFilter) {
+      filterConditions.push(ilike(department.name, `%${deptFilter}%`));
     }
     const whereClauses = filterConditions.length > 0 ? and(...filterConditions) : undefined;
 
+    console.log('[Backend] Fetching subjects count...');
     const countResult = await db
       .select({ count: sql<number>`count(*)` })
       .from(subjects)
       .leftJoin(department, eq(subjects.departmentId, department.id))
       .where(whereClauses);
     const totalCount = Number(countResult[0]?.count ?? 0);
+    console.log('[Backend] Count fetched successfully:', totalCount);
 
+    console.log('[Backend] Fetching subjects list...');
     const subjectsList = await db
       .select({
         ...getTableColumns(subjects),
@@ -58,6 +62,7 @@ router.get('/', async (req, res) => {
       .limit(limitPerPage)
       .orderBy(desc(subjects.createdAt))
       .offset(offset);
+    console.log('[Backend] Subjects list fetched successfully:', subjectsList.length, 'items');
 
     res.status(200).json({
       data: subjectsList,
